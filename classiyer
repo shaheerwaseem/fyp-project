@@ -1,0 +1,58 @@
+#google colab link https://colab.research.google.com/drive/1P2XI1UG4oDYtthhO-r1Ii6HWfAEHwtVb?usp=sharing
+
+
+!pip install gradio
+!pip install opencv-python-headless matplotlib gradio
+
+!pip install opencv-python opencv-python-headless
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalcatface.xml')
+if face_cascade.empty():
+    print("Haar cascade for face detection not loaded.")
+else:
+    print("Haar cascade for face detection loaded successfully.")
+
+
+def process_image(image):
+    try:
+        img = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        print("Converted the image from RGB to BGR")
+        img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+        print("Converted the image from RGB to GRAY")
+
+        # Remove the following lines to avoid using the XML file
+        # stop_data = cv2.CascadeClassifier('stop.jpg')
+        # if stop_data.empty():
+        #     print('Error: XML file not loaded. Check the file path and ensure the file exists.')
+        #     return image
+        # print("Loaded stop_data.xml cascade file.")
+
+        # Add your custom object detection logic here
+        # Example: Detect faces using Haar cascade
+        faces = face_cascade.detectMultiScale(img_gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        print(f'{len(faces)} faces detected')
+
+        for (x, y, w, h) in faces:
+            cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 5)
+
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        print("Converted the image from BGR to RGB")
+        return img_rgb
+    except Exception as e:
+        print(f"Error during processing: {e}")
+        return image
+
+import gradio as gr
+
+interface = gr.Interface(fn=process_image,
+                         inputs=gr.Image(type="numpy"),
+                         outputs=gr.Image(type="numpy"),
+                         title = "image detection",
+                         description = "upload an image for detection")
+interface.launch(debug = True)
+
+!pip install mahotas
