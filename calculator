@@ -1,0 +1,105 @@
+import gradio as gr
+
+# Global variable to store the current expression
+expression = ""
+def calculator(x, y, operation):
+  if operation == "add":
+    return x + y
+  elif operation == "subtract":
+    return x - y
+  elif operation == "multiply":
+    return x * y
+  elif operation == "divide":
+    return x / y
+  elif operation == "exponent":
+    return x ** y
+  elif operation == "modulus":
+    return x % y
+  elif operation == "floor division":
+    return x // y
+  else:
+    return "Invalid operation"
+
+
+def update_expression(new_value):
+    global expression
+    expression += str(new_value)
+    return expression
+
+def clear_expression():
+    global expression
+    expression = ""
+    return expression
+
+def calculate_expression():
+    global expression
+    try:
+        result = str(eval(expression))  # Using eval for simplicity
+    except Exception as e:
+        result = "Error"
+    expression = ""  # Clear expression after calculation
+    return result
+
+with gr.Blocks() as calculator_interface:
+    result_box = gr.Textbox(value="", label="Result", interactive=False)
+
+    # First row
+    with gr.Row():
+        # Create number buttons and assign them to variables
+        button_7 = gr.Button("7")
+        button_8 = gr.Button("8")
+        button_9 = gr.Button("9")
+
+
+        # Attach click events to number buttons, passing the button objects as inputs
+        button_7.click(update_expression, inputs=[button_7], outputs=result_box)
+        button_8.click(update_expression, inputs=[button_8], outputs=result_box)
+        button_9.click(update_expression, inputs=[button_9], outputs=result_box)
+
+
+    # Second row (similar changes for other rows)
+    with gr.Row():
+        button_4 = gr.Button("4")
+        button_5 = gr.Button("5")
+        button_6 = gr.Button("6")
+
+        button_1 = gr.Button("1")
+        button_2 = gr.Button("2")
+        button_3 = gr.Button("3")
+        button_0 = gr.Button("0")
+        button_sub = gr.Button("-")
+        button_mul = gr.Button("*")
+
+        button_dot = gr.Button(".")
+        button_add = gr.Button("+")
+        button_equal = gr.Button("=")
+        button_div = gr.Button("/")
+        button_exp = gr.Button("expoent")
+        button_mod = gr.Button("modulus")
+        button_floor = gr.Button("floor")
+        # Attach click events to number buttons, passing the button objects as inputs
+        button_4.click(update_expression, inputs=[button_4], outputs=result_box)
+        button_5.click(update_expression, inputs=[button_5], outputs=result_box)
+        button_6.click(update_expression, inputs=[button_6], outputs=result_box)
+        button_mul.click(update_expression, inputs=[button_mul], outputs=result_box)
+        button_1.click(update_expression, inputs=[button_1], outputs=result_box)
+        button_2.click(update_expression, inputs=[button_2], outputs=result_box)
+        button_3.click(update_expression, inputs=[button_3], outputs=result_box)
+        button_sub.click(update_expression, inputs=[button_sub], outputs=result_box)
+        button_mul.click(update_expression, inputs=[button_mul], outputs=result_box)
+        button_0.click(update_expression, inputs=[button_0], outputs=result_box)
+        button_dot.click(update_expression, inputs=[button_dot], outputs=result_box)
+        button_add.click(update_expression, inputs=[button_add], outputs=result_box)
+        button_equal.click(calculate_expression, outputs=result_box)
+        button_div.click(update_expression, inputs=[button_div], outputs=result_box)
+        button_exp.click(update_expression, inputs=[button_exp], outputs=result_box)
+        button_mod.click(update_expression, inputs=[button_mod], outputs=result_box)
+        button_floor.click(update_expression, inputs=[button_floor], outputs=result_box)
+    # ... (Rest of the rows with similar changes)
+
+    # Clear button
+    gr.Button("Clear").click(clear_expression, outputs=result_box)
+
+# Launch the interface
+if __name__ == "__main__":
+    calculator_interface.launch()
