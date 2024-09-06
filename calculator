@@ -1,3 +1,5 @@
+link: https://colab.research.google.com/drive/10FF_gVwGKqBqbKi8BDPadj28aZlfYs5K?usp=sharing
+
 import gradio as gr
 
 # Global variable to store the current expression
